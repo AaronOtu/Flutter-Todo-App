@@ -20,18 +20,6 @@ class TodoService {
   }
 
 
-
-//POST REGQUEST
-// static Future<Map<String,>> submitData() async{
-//    const url = "https://api.nstack.in/v1/todos";
-//     final uri = Uri.parse(url);
-//     final response = await http.post(uri,
-//         body: jsonEncode(body), headers: {"Content-Type": "application/json"});
-  
-// }
-
-
-
   //DELETE REQUEST
   static Future<bool> deleteById(String id) async {
     final url = "https://api.nstack.in/v1/todos/$id";
@@ -41,5 +29,5 @@ class TodoService {
     return response.statusCode == 200;
   }
 
-  //
+
 }
