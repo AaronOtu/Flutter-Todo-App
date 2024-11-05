@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -13,7 +15,7 @@ class AddList extends StatefulWidget {
 
 class _AddListState extends State<AddList> {
   TextEditingController titleController = TextEditingController();
-  TextEditingController descriptionController = TextEditingController();
+  TextEditingController descriptionController= TextEditingController();
   bool isEdit = false;
 
   @override
@@ -21,8 +23,19 @@ class _AddListState extends State<AddList> {
     super.initState();
     if (widget.todo != null) {
       isEdit = true;
+
+    titleController = TextEditingController(text: widget.todo?['title'] ?? '');
+    descriptionController = TextEditingController(text: widget.todo?['description'] ?? '');
     }
   }
+
+ @override
+  void dispose() {
+    titleController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -80,11 +93,12 @@ class _AddListState extends State<AddList> {
     if (response.statusCode == 200) {
       titleController.text = '';
       descriptionController.text = '';
+      Navigator.pop(context,true);
       showSuccessMessage('Update successful');
     } else {
       showErrorMessage("Edit failed");
     }
-  }
+  } 
 
   Future<void> submitData() async {
     final title = titleController.text;
@@ -103,6 +117,7 @@ class _AddListState extends State<AddList> {
     if (response.statusCode == 201) {
       titleController.text = '';
       descriptionController.text = '';
+       Navigator.pop(context,true);
       showSuccessMessage("Task created successfully");
     } else {
       showErrorMessage("Task creation failed");
@@ -128,4 +143,7 @@ class _AddListState extends State<AddList> {
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+
+
+  
 }

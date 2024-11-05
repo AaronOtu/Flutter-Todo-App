@@ -81,23 +81,29 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) {
-                return const AddList();
-              },
-            ),
-          );
+          navigateToAddPage();
         },
         label: const Text('Add Todo'),
       ),
     );
   }
 
+ 
+
   Future<void> navigateToEditPage(Map item) async {
-    final route = MaterialPageRoute(builder: (context) => AddList(todo: item));
-    await Navigator.push(context, route);
+    final route = MaterialPageRoute(
+      builder: (context) => AddList(todo: item),
+    );
+
+    final result = await Navigator.push(context, route);
+
+    if (result == true) {
+      setState(() {
+        isLoading = true;
+      });
+      fetchTodo(); // Refresh the todo list
+      showSuccessMessage("Task updated successfully");
+    }
   }
 
   Future<void> navigateToAddPage() async {
@@ -128,7 +134,7 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         items = response;
       });
-    }else{
+    } else {
       showErrorMessage("An error occurred while fetching");
     }
 
